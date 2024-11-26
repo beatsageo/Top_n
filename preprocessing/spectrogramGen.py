@@ -44,3 +44,4 @@ for i in range(0,numSongs):
     img = librosa.display.specshow(S_dB, x_axis='time', y_axis='mel', sr=sr, fmax=8000, ax=ax)
     fig.colorbar(img, ax=ax, format='%+2.0f dB')
     plt.savefig(f"{os.path.join(to_dir,songs[i])}.jpg")
+    plt.close(fig)
