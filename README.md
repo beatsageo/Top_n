@@ -1,5 +1,10 @@
 
 # Top_n Genre Classification Neural Neural Network 
+
+<p align="center">
+<img src="/MIT-Neural-Networks-SL.gif" alt="image" width="300" height="auto">
+</p>
+
 ## Contrubutors
 - D. Chaujan
 - N. Huffman
@@ -13,7 +18,9 @@
 
 ## License
 
+View the MIT [LICENSE](/LICENSE)
+
 ## Links
 
 
-## Contrubute!
+## Contribute!
