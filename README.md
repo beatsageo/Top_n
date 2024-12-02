@@ -97,4 +97,4 @@ Reads the file R U L E T H E W O R L D (Gulf War edit).mp4 from the current dire
 
 
 ## Contribute!
-  see [Contributing](/contributing.md)
+  see [Contributing](/Contributing.md)
