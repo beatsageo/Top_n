@@ -10,7 +10,7 @@
 <img src="/MIT-Neural-Networks-SL.gif" alt="image" width="300" height="auto">
 </p>
 
-## Contrubutors
+## Contributors
 - D. Chauhan
 - N. Huffman
 - J. Kim
