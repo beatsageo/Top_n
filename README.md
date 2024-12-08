@@ -11,7 +11,7 @@
 </p>
 
 ## Contrubutors
-- D. Chaujan
+- D. Chauhan
 - N. Huffman
 - J. Kim
 - B. Nguyen
