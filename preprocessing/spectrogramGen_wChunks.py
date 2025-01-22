@@ -8,7 +8,7 @@ print(os.getcwd())
 
 # Get audio file directory
 try:
-    from_dir = input("\nPlease input the name of the folder with your audio files.\nInsert '~' to automatially append the working directory.\n>")
+    from_dir = input("\nPlease input the name of the folder with your audio files.\nInsert '~' to automatically append the working directory.\n>")
     if from_dir == "":
         from_dir = "~/audio-files"
     if from_dir[0] == "~":
