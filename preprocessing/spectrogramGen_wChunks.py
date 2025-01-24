@@ -32,7 +32,7 @@ except FileExistsError:
     print(f"{to_dir} Directory Found")
 
 # Create and save spectrogram images
-songs = list(song for song in songs if song.endswith((".au",".mp3")))
+songs = list(song for song in songs if song.endswith((".au",".mp3",".m4a",".mp4",".webm")))
 numSongs = len(songs)
 resCount = 0
 print(f"Processing {numSongs} audio files...")
