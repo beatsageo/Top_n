@@ -1,158 +1,49 @@
-
-
 import numpy as np
 from sklearn.model_selection import train_test_split
 import tensorflow.keras as keras
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import os
 
-# make sure to change the path to the correct path of mel spectrograms on your device
-rock = r"C:\Users\drake\OneDrive\Desktop\Dataset_Spectrogram_v2\rock"
-
-metal = r"C:\Users\drake\OneDrive\Desktop\Dataset_Spectrogram_v2\metal"
-
-blues = r"C:\Users\drake\OneDrive\Desktop\Dataset_Spectrogram_v2\blues"
-
-classical = r"C:\Users\drake\OneDrive\Desktop\Dataset_Spectrogram_v2\classical"
-
-country = r"C:\Users\drake\OneDrive\Desktop\Dataset_Spectrogram_v2\country"
-
-disco = r"C:\Users\drake\OneDrive\Desktop\Dataset_Spectrogram_v2\disco"
-
-electronic = r"C:\Users\drake\OneDrive\Desktop\Dataset_Spectrogram_v2\electronic"
-
-hiphop = r"C:\Users\drake\OneDrive\Desktop\Dataset_Spectrogram_v2\hiphop"
-
-jazz = r"C:\Users\drake\OneDrive\Desktop\Dataset_Spectrogram_v2\jazz"
-
-pop = r"C:\Users\drake\OneDrive\Desktop\Dataset_Spectrogram_v2\pop"
-
-reggae = r"C:\Users\drake\OneDrive\Desktop\Dataset_Spectrogram_v2\reggae"
-
-rnb = r"C:\Users\drake\OneDrive\Desktop\Dataset_Spectrogram_v2\rnb"
+GENRE_PATHS = {
+    0: r"C:\Users\drake\OneDrive\Desktop\Senior Software II\Out_Spectrogram_Balanced\blues",
+    1: r"C:\Users\drake\OneDrive\Desktop\Senior Software II\Out_Spectrogram_Balanced\classical",
+    2: r"C:\Users\drake\OneDrive\Desktop\Senior Software II\Out_Spectrogram_Balanced\country",
+    3: r"C:\Users\drake\OneDrive\Desktop\Senior Software II\Out_Spectrogram_Balanced\disco",
+    4: r"C:\Users\drake\OneDrive\Desktop\Senior Software II\Out_Spectrogram_Balanced\electronic",
+    5: r"C:\Users\drake\OneDrive\Desktop\Senior Software II\Out_Spectrogram_Balanced\hiphop",
+    6: r"C:\Users\drake\OneDrive\Desktop\Senior Software II\Out_Spectrogram_Balanced\jazz",
+    7: r"C:\Users\drake\OneDrive\Desktop\Senior Software II\Out_Spectrogram_Balanced\metal",
+    8: r"C:\Users\drake\OneDrive\Desktop\Senior Software II\Out_Spectrogram_Balanced\pop",
+    9: r"C:\Users\drake\OneDrive\Desktop\Senior Software II\Out_Spectrogram_Balanced\reggae",
+    10: r"C:\Users\drake\OneDrive\Desktop\Senior Software II\Out_Spectrogram_Balanced\rnb",
+    11: r"C:\Users\drake\OneDrive\Desktop\Senior Software II\Out_Spectrogram_Balanced\rock"
+}
 
 
+def load_spectrograms(genre_paths, target_size=(128,128)):
+    x, y = [], []
 
-
-def load_spectrograms(rock, metal, blues, classical, country, disco, electronic, hiphop, jazz, pop, reggae, rnb):
-    x = []
-    y = []
-    #ignore the .mp3 in the name of the files in the dataset its still a .jpg ext...
-    print("Loading the rock spectrograms...")
-    for filename in os.listdir(rock):
-        if filename.endswith(".jpg"):
-            img_path = os.path.join(rock, filename)
-            img = load_img(img_path, target_size=(128, 128))
-            img_array = img_to_array(img)
-            img_array = img_array / 255.0
-            x.append(img_array)
-            y.append(0)
-    print("Loading the metal spectrograms...")
-    for filename in os.listdir(metal):
-        if filename.endswith(".jpg"):
-            img_path = os.path.join(metal, filename)
-            img = load_img(img_path, target_size=(128, 128))
-            img_array = img_to_array(img)
-            img_array = img_array / 255.0
-            x.append(img_array)
-            y.append(1)
-    print("Loading the blues spectrograms...")
-    for filename in os.listdir(blues):
-        if filename.endswith(".jpg"):
-            img_path = os.path.join(blues, filename)
-            img = load_img(img_path, target_size=(128, 128))
-            img_array = img_to_array(img)
-            img_array = img_array / 255.0
-            x.append(img_array)
-            y.append(2)
-    print("Loading the classical spectrograms...")
-    for filename in os.listdir(classical):
-        if filename.endswith(".jpg"):
-            img_path = os.path.join(classical, filename)
-            img = load_img(img_path, target_size=(128, 128))
-            img_array = img_to_array(img)
-            img_array = img_array / 255.0
-            x.append(img_array)
-            y.append(3)
-    print("Loading the country spectrograms...")   
-    for filename in os.listdir(country):
-        if filename.endswith(".jpg"):
-            img_path = os.path.join(country, filename)
-            img = load_img(img_path, target_size=(128, 128))
-            img_array = img_to_array(img)
-            img_array = img_array / 255.0
-            x.append(img_array)
-            y.append(4)
-    print("Loading the disco spectrograms...")
-    for filename in os.listdir(disco):
-        if filename.endswith(".jpg"):
-            img_path = os.path.join(disco, filename)
-            img = load_img(img_path, target_size=(128, 128))
-            img_array = img_to_array(img)
-            img_array = img_array / 255.0
-            x.append(img_array)
-            y.append(5)
-    print("Loading the electronic spectrograms...")
-    for filename in os.listdir(electronic):
-        if filename.endswith(".jpg"):
-            img_path = os.path.join(electronic, filename)
-            img = load_img(img_path, target_size=(128, 128))
-            img_array = img_to_array(img)
-            img_array = img_array / 255.0
-            x.append(img_array)
-            y.append(6)
-    print("Loading the hiphop spectrograms...")
-    for filename in os.listdir(hiphop):
-        if filename.endswith(".jpg"):
-            img_path = os.path.join(hiphop, filename)
-            img = load_img(img_path, target_size=(128, 128))
-            img_array = img_to_array(img)
-            img_array = img_array / 255.0
-            x.append(img_array)
-            y.append(7)
-    print("Loading the jazz spectrograms...")
-    for filename in os.listdir(jazz):
-        if filename.endswith(".jpg"):
-            img_path = os.path.join(jazz, filename)
-            img = load_img(img_path, target_size=(128, 128))
-            img_array = img_to_array(img)
-            img_array = img_array / 255.0
-            x.append(img_array)
-            y.append(8)
-    print("Loading the pop spectrograms...")
-    for filename in os.listdir(pop):
-        if filename.endswith(".jpg"):
-            img_path = os.path.join(pop, filename)
-            img = load_img(img_path, target_size=(128, 128))
-            img_array = img_to_array(img)
-            img_array = img_array / 255.0
-            x.append(img_array)
-            y.append(9)
-    print("Loading the reggae spectrograms...")
-    for filename in os.listdir(reggae):
-        if filename.endswith(".jpg"):
-            img_path = os.path.join(reggae, filename)
-            img = load_img(img_path, target_size=(128, 128))
-            img_array = img_to_array(img)
-            img_array = img_array / 255.0
-            x.append(img_array)
-            y.append(10)
-    print("Loading the rnb spectrograms...")
-    for filename in os.listdir(rnb):
-        if filename.endswith(".jpg"):
-            img_path = os.path.join(rnb, filename)
-            img = load_img(img_path, target_size=(128, 128))
-            img_array = img_to_array(img)
-            img_array = img_array / 255.0
-            x.append(img_array)
-            y.append(11)
-
-    print(f"Loaded this many spectrograms: {len(x)}")
-    return np.array(x), np.array(y)
+    for label, folder_path in genre_paths.items():
+        print(f"Loading the spectrograms for label {label} from: {folder_path}")
+        for filename in os.listdir(folder_path):
+            # if file ends with .jpg
+            if filename.endswith(".jpg"):
+                img_path = os.path.join(folder_path, filename)
+                # load and convert the image to an array
+                img = load_img(img_path, target_size=target_size)
+                img_array = img_to_array(img) / 255
+                x.append(img_array)
+                y.append(label)
+    x = np.array(x)
+    y = np.array(y)
+    print(f"The total spectrograms loaded: {len(x)}")
+    return x, y
 
 if __name__ == "__main__":
     
-    x, y = load_spectrograms(rock, metal, blues, classical, country, disco, electronic, hiphop, jazz, pop, reggae, rnb)
+    #Loading Data
+    x, y = load_spectrograms(GENRE_PATHS)
+    #Training Data
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
 
 
@@ -174,6 +65,11 @@ if __name__ == "__main__":
     
     history = model.fit(x_train, y_train, validation_data=(x_test, y_test), batch_size=32, epochs=5)
 
-
     
+    """
+
+    Save model if necessary
+    model.save('example.keras')
+    
+    """
 
