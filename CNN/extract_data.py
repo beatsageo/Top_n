@@ -6,7 +6,7 @@ import librosa
 DATASET_PATH = "gtzan_dataset"
 JSON_PATH = "data_10.json"
 SAMPLE_RATE = 22050
-TRACK_DURATION = 30 # measured in seconds
+TRACK_DURATION = 30     # measured in seconds
 SAMPLES_PER_TRACK = SAMPLE_RATE * TRACK_DURATION
 
 """extract_data.py extracts data from a preferably large music dataset,
@@ -51,8 +51,7 @@ def save_mfcc(dataset_path, json_path, num_mfcc=13, n_fft=2048, hop_length=512, 
 
             # process all audio files in genre sub-dir
             for f in filenames:
-
-		# load audio file
+                # load audio file
                 file_path = os.path.join(dirpath, f)
                 signal, sample_rate = librosa.load(file_path, sr=SAMPLE_RATE)
 
