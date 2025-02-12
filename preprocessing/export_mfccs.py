@@ -30,9 +30,12 @@ def save_mfcc(dataset_path, json_path, log_path, num_mfcc=13, n_fft=2048, hop_le
         "mfcc": []
     }
     log = {
+        "segmentCount": 0,
         "failCount": 0,
         "failed": []
     }
+    currSegment = 0
+    numJSON = 0
 
     samples_per_segment = int(SAMPLES_PER_TRACK / num_segments)
     num_mfcc_vectors_per_segment = math.ceil(samples_per_segment / hop_length)
@@ -58,6 +61,18 @@ def save_mfcc(dataset_path, json_path, log_path, num_mfcc=13, n_fft=2048, hop_le
 
                     # process all segments of audio file
                     for d in range(num_segments):
+
+                        log["segmentCount"] += 1
+        
+                        # create json file every 1000 segments
+                        if log["segmentCount"] % 100 == 0:
+                            numJSON += 1
+                            index = json_path.find(".json")
+                            currPath = json_path[:index] + str(numJSON) + json_path[index:]
+                            with open(currPath, "w") as fp:
+                                json.dump(data, fp, indent=4)
+                            for key in data:
+                                data[key] = []
 
                         # calculate start and finish sample for current segment
                         start = samples_per_segment * d
