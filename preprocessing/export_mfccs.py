@@ -65,14 +65,18 @@ def save_mfcc(dataset_path, json_path, log_path, num_mfcc=13, n_fft=2048, hop_le
                         log["segmentCount"] += 1
         
                         # create json file every 1000 segments
-                        if log["segmentCount"] % 1000 == 0:
+                        if log["segmentCount"] % 100 == 0:
                             numJSON += 1
                             index = json_path.find(".json")
                             currPath = json_path[:index] + str(numJSON) + json_path[index:]
                             with open(currPath, "w") as fp:
                                 json.dump(data, fp, indent=4)
                             for key in data:
-                                data[key] = []
+                                data = {
+                                    "mapping": [semantic_label],
+                                    "labels": [],
+                                    "mfcc": []
+                                }
 
                         # calculate start and finish sample for current segment
                         start = samples_per_segment * d
