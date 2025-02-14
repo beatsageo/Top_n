@@ -65,7 +65,7 @@ def save_mfcc(dataset_path, json_path, log_path, num_mfcc=13, n_fft=2048, hop_le
                         log["segmentCount"] += 1
         
                         # create json file every 1000 segments
-                        if log["segmentCount"] % 1000 == 0:
+                        if log["segmentCount"] % 100 == 0:
                             numJSON += 1
                             index = json_path.find(".json")
                             currPath = json_path[:index] + str(numJSON) + json_path[index:]
@@ -94,6 +94,7 @@ def save_mfcc(dataset_path, json_path, log_path, num_mfcc=13, n_fft=2048, hop_le
                 except Exception as e:
                     log["failCount"] += 1
                     log["failed"].append({"file": file_path, "exception": e})
+                    pass
                     
 
     # save MFCCs to json file
