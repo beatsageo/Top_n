@@ -8,8 +8,8 @@ JSON_PREFIX = os.path.basename(DATASET_PATH) + "_mfccs"
 LOG_PATH = JSON_PREFIX + "_log.json"
 GENRE_MAPPING_PATH = "genre_mapping.json"  # Path to global genre mapping
 SAMPLE_RATE = 22050
-SEGMENT_DURATION = 30  # measured in seconds
-SAMPLES_PER_SEGMENT = SAMPLE_RATE * SEGMENT_DURATION
+VECTOR_DURATION = 3  # measured in seconds
+SAMPLES_PER_VECTOR = SAMPLE_RATE * VECTOR_DURATION
 
 
 def load_or_create_genre_mapping(mapping_path):
@@ -37,7 +37,7 @@ def update_genre_mapping(mapping_path, new_genre):
         print(f"Added new genre: {new_genre}")
 
 
-def save_mfcc(dataset_path, json_prefix, log_path, genre_mapping_path, num_mfcc=13, n_fft=2048, hop_length=512, vectors_per_segment=10, vector_limit=10000):
+def save_mfcc(dataset_path, json_prefix, log_path, genre_mapping_path, num_mfcc=13, n_fft=2048, hop_length=512, SAMPLES_PER_VECTOR=66150, vector_limit=10000):
     """Extracts MFCCs from music dataset and saves them into segmented JSON files along with genre labels.
        Logs errors for corrupt files.
 
@@ -72,7 +72,7 @@ def save_mfcc(dataset_path, json_prefix, log_path, genre_mapping_path, num_mfcc=
     numJSON = 1  # JSON file index
 
     # Calculate the number of MFCC vectors per segment
-    num_mfcc_coefficient_per_vector = math.ceil(SAMPLES_PER_SEGMENT / vectors_per_segment / hop_length)  # 13 mfccs vectors per segment
+    num_mfcc_coefficient_per_vector = math.ceil(SAMPLES_PER_VECTOR / hop_length)  # 129 mfccs vectors per segment
 
     # Loop through all genre sub-folders
     for dirpath, _, filenames in os.walk(dataset_path):
@@ -97,18 +97,17 @@ def save_mfcc(dataset_path, json_prefix, log_path, genre_mapping_path, num_mfcc=
                     # Load audio file
                     signal, sample_rate = librosa.load(file_path, sr=SAMPLE_RATE)
 
-                    # Calculate the number of 30-second segments within the full track
+                    # Calculate the total number of vectors
                     track_duration = len(signal) / sample_rate  # Duration in seconds
-                    num_segments = int((track_duration // SEGMENT_DURATION))  # Adjust dynamically
-                    num_vectors = (num_segments * vectors_per_segment)
+                    num_vectors = int((track_duration // VECTOR_DURATION))  # Adjust dynamically
 
-                    print(f"Processing {file_path}: {track_duration:.2f}s split into {num_segments} segments ({num_vectors} vectors)")
+                    print(f"Processing {file_path}: {track_duration:.2f} into ({num_vectors} vectors)")
 
                     # Process all vectors of audio file
                     for d in range(num_vectors):
 
                         # Define vector boundaries
-                        samples_per_vector = SAMPLES_PER_SEGMENT // vectors_per_segment
+                        samples_per_vector = sample_rate * VECTOR_DURATION
                         start = samples_per_vector * d
                         finish = start + samples_per_vector
 
@@ -119,9 +118,10 @@ def save_mfcc(dataset_path, json_prefix, log_path, genre_mapping_path, num_mfcc=
                         # Extract MFCCs
                         mfcc = librosa.feature.mfcc(y=signal[start:finish], sr=sample_rate, n_mfcc=num_mfcc, n_fft=n_fft, hop_length=hop_length)
                         mfcc = mfcc.T
+                        # print(f"MFCC shape: {mfcc.shape}")  # Should print (130, 13)
 
                         # Store only vectors with the expected number of MFCC coefficients
-                        if len(mfcc) == num_mfcc_coefficient_per_vector:  # 13 mfccs coefficients per segment
+                        if len(mfcc) == num_mfcc_coefficient_per_vector:  # 13 mfcc coefficients per segment
                             data["mfcc"].append(mfcc.tolist())
                             data["labels"].append(genre_index)
                             # print("{}, vector: {}".format(file_path, d + 1))
@@ -165,4 +165,4 @@ def save_mfcc(dataset_path, json_prefix, log_path, genre_mapping_path, num_mfcc=
 
 
 if __name__ == "__main__":
-    save_mfcc(DATASET_PATH, JSON_PREFIX, LOG_PATH, GENRE_MAPPING_PATH, vectors_per_segment=10, vector_limit=10000)
+    save_mfcc(DATASET_PATH, JSON_PREFIX, LOG_PATH, GENRE_MAPPING_PATH, num_mfcc=13, n_fft=1048, hop_length=512, SAMPLES_PER_VECTOR=SAMPLES_PER_VECTOR, vector_limit=10000)
