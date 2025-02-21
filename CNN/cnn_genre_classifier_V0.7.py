@@ -294,6 +294,12 @@ def run_prediction():
 
 if __name__ == "__main__":
 
+    """Using CLI to choose between training and prediction.
+    In cli, run the following commands:
+    To train model: 'python cnn_genre_classifier_V0.7.py --mode train'
+    To predict model: 'python cnn_genre_classifier_V0.7.py --mode predict'
+    """
+
     parser = argparse.ArgumentParser(description="Train/evaluate the model or run a prediction.")
     parser.add_argument("--mode", type=str, choices=["train", "predict"], required=True,
                         help="Choose to either 'train' the model or 'predict' a sample.")
