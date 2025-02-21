@@ -3,7 +3,8 @@ import os
 import math
 import librosa
 
-DATASET_PATH = "test_dataset_"
+DATASET_PATH = "gtzan_dataset_split"
+OUTPUT_FOLDER = os.path.basename(DATASET_PATH) + "_mfccs"
 JSON_PREFIX = os.path.basename(DATASET_PATH) + "_mfccs"
 LOG_PATH = JSON_PREFIX + "_log.json"
 GENRE_MAPPING_PATH = "genre_mapping.json"  # Path to global genre mapping
@@ -37,11 +38,12 @@ def update_genre_mapping(mapping_path, new_genre):
         print(f"Added new genre: {new_genre}")
 
 
-def save_mfcc(dataset_path, json_prefix, log_path, genre_mapping_path, num_mfcc=13, n_fft=2048, hop_length=512, SAMPLES_PER_VECTOR=66150, vector_limit=10000):
+def save_mfcc(dataset_path, OUTPUT_FOLDER, json_prefix, log_path, genre_mapping_path, num_mfcc=13, n_fft=2048, hop_length=512, SAMPLES_PER_VECTOR=66150, vector_limit=10000):
     """Extracts MFCCs from music dataset and saves them into segmented JSON files along with genre labels.
        Logs errors for corrupt files.
 
        :param dataset_path (str): Path to dataset
+       :param output_folder (str): Path to store output JSON files
        :param json_prefix (str): Prefix for exported JSON files
        :param log_path (str): Path to log file for errors
        :param genre_mapping_path (str): Path to global genre mapping file
@@ -51,6 +53,8 @@ def save_mfcc(dataset_path, json_prefix, log_path, genre_mapping_path, num_mfcc=
        :param vectors_per_segment (int): Number of vectors per segment
        :param vector_limit (int): Number of segments per JSON file
     """
+    # Ensure the output folder exists
+    os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
     # Load or create genre mapping
     genre_mapping = load_or_create_genre_mapping(genre_mapping_path)
@@ -72,7 +76,7 @@ def save_mfcc(dataset_path, json_prefix, log_path, genre_mapping_path, num_mfcc=
     numJSON = 1  # JSON file index
 
     # Calculate the number of MFCC vectors per segment
-    num_mfcc_coefficient_per_vector = math.ceil(SAMPLES_PER_VECTOR / hop_length)  # 129 mfccs vectors per segment
+    num_mfcc_coefficient_per_vector = math.ceil(SAMPLES_PER_VECTOR / hop_length)  # 130 mfccs vectors per segment
 
     # Loop through all genre sub-folders
     for dirpath, _, filenames in os.walk(dataset_path):
@@ -118,31 +122,29 @@ def save_mfcc(dataset_path, json_prefix, log_path, genre_mapping_path, num_mfcc=
                         # Extract MFCCs
                         mfcc = librosa.feature.mfcc(y=signal[start:finish], sr=sample_rate, n_mfcc=num_mfcc, n_fft=n_fft, hop_length=hop_length)
                         mfcc = mfcc.T
-                        # print(f"MFCC shape: {mfcc.shape}")  # Should print (130, 13)
 
                         # Store only vectors with the expected number of MFCC coefficients
-                        if len(mfcc) == num_mfcc_coefficient_per_vector:  # 13 mfcc coefficients per segment
+                        if len(mfcc) == num_mfcc_coefficient_per_vector:  # 13 MFCC coefficients per segment
                             data["mfcc"].append(mfcc.tolist())
                             data["labels"].append(genre_index)
-                            # print("{}, vector: {}".format(file_path, d + 1))
 
-                        # Keeping track of the number of vectors processed
-                        log["vectorCount"] += 1
+                            # Keeping track of the number of vectors processed
+                            log["vectorCount"] += 1
 
-                        # Create a new JSON file when vector limit is reached
-                        if log["vectorCount"] % vector_limit == 0:
-                            json_filename = f"{json_prefix}_{numJSON}.json"
-                            with open(json_filename, "w") as fp:
-                                json.dump(data, fp, indent=4)
-                            print(f"Saved {json_filename}")
+                            # Create a new JSON file when vector limit is reached
+                            if log["vectorCount"] % vector_limit == 0 and log["vectorCount"] != 0:
+                                json_filename = os.path.join(OUTPUT_FOLDER, f"{json_prefix}_{numJSON}.json")
+                                print(f"Saved {json_filename}")
+                                with open(json_filename, "w") as fp:
+                                    json.dump(data, fp, indent=4)
 
-                            # Reset data and increment file counter
-                            data = {
-                                "mapping": genre_mapping,
-                                "labels": [],
-                                "mfcc": []
-                            }
-                            numJSON += 1
+                                    # Reset data and increment file counter
+                                    data = {
+                                        "mapping": genre_mapping,
+                                        "labels": [],
+                                        "mfcc": []
+                                    }
+                                    numJSON += 1
 
                 except Exception as e:
                     log["failCount"] += 1
@@ -151,13 +153,14 @@ def save_mfcc(dataset_path, json_prefix, log_path, genre_mapping_path, num_mfcc=
 
     # Save final JSON file if it contains data
     if data["mfcc"]:
-        json_filename = f"{json_prefix}_{numJSON}.json"
+        json_filename = os.path.join(OUTPUT_FOLDER, f"{json_prefix}_{numJSON}.json")
         with open(json_filename, "w") as fp:
             json.dump(data, fp, indent=4)
         print(f"Saved final {json_filename}")
 
     # Save log file
-    with open(log_path, "w") as fp:
+    log_filename = os.path.join(OUTPUT_FOLDER, log_path)
+    with open(log_filename, "w") as fp:
         json.dump(log, fp, indent=4)
 
     print(f"\nProcessing complete. {log['vectorCount']} vectors extracted.")
@@ -165,4 +168,4 @@ def save_mfcc(dataset_path, json_prefix, log_path, genre_mapping_path, num_mfcc=
 
 
 if __name__ == "__main__":
-    save_mfcc(DATASET_PATH, JSON_PREFIX, LOG_PATH, GENRE_MAPPING_PATH, num_mfcc=13, n_fft=1048, hop_length=512, SAMPLES_PER_VECTOR=SAMPLES_PER_VECTOR, vector_limit=10000)
+    save_mfcc(DATASET_PATH, OUTPUT_FOLDER, JSON_PREFIX, LOG_PATH, GENRE_MAPPING_PATH, num_mfcc=13, n_fft=1048, hop_length=512, SAMPLES_PER_VECTOR=SAMPLES_PER_VECTOR, vector_limit=1000)
