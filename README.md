@@ -39,14 +39,37 @@ To install python 3.12, consider installing and using [Homebrew](https://brew.sh
 brew install python@3.12
 ~~~
 
-Download the UI folder and run the following command:
+Download the UI folder and run the following commands in that folder /path/to/the/folder/called/UI:
 ~~~
-python3.12 -m venv ./venv/
+python3.12 -m venv ./venv
 source ./venv/bin/activate
 pip install -r ./requirements.txt
 deactivate
 ~~~
-The resultant venv folder will take up about 4.2 GiB of space. Be aware that, if the path to the folder you downloaded the UI folder into has any :s in it, this will fail. To fix this error, relocate the UI folder
+The resultant venv folder will take up about 4.2 GiB of space. 
+> Be aware that, if the path to the folder you downloaded the UI folder into has any :s in it, this will fail. To fix this error, relocate the UI folder
+
+### Windows (Untested)
+To install python 3.12 on Windows, visit [the Python website](https://www.python.org/downloads/windows/) to download and install the latest 3.12.x version of Python. This guide was written when that was 3.12.9, should extra errors crop up. Alternatively, install python 3.12 directly from the [Microsoft Store](https://apps.microsoft.com/detail/9ncvdn91xzqp?hl=en-us&gl=US).
+
+Download the UI folder and run (using the Windows Terminal or cmd.exe, the commands are slightly different in PowerShell) the following commands in that folder, C:\path\to\the\folder\called\UI:
+~~~
+python3.12 -m venv .\venv
+.\venv\Scripts\activate
+pip install -r .\requirements.txt
+deactivate
+~~~
+If PowerShell, use the following commands instead:
+~~~
+python3.12 -m venv .\venv
+.\venv\Scripts\Activate.ps1
+pip install -r .\requirements.txt
+deactivate
+~~~
+The resultant venv folder will take up about 4.2 GiB? of space. 
+
+findGenre will not work, use findGenre_win (release tbd) on Windows. Alternatively, findGenre may work on Windows using [Git BASH](https://gitforwindows.org/)
+If using a UNIX-like environment for Windows, like [Cygwin](https://cygwin.com/), then the Linux commands should be used instead, and findGenre should work, but one will have to install python 3.12 using Cygwin.
 
 ## Usage
 
