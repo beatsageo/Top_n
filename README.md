@@ -30,7 +30,23 @@ View the MIT [LICENSE](/LICENSE)
 
 ## Installation
 
-  TBD probably an installer for WIN/Mac/Linux
+### Requirements
+python 3.12
+
+### Linux/MacOS
+To install python 3.12, consider installing and using [Homebrew](https://brew.sh/). Once Homebrew is installed, run the following command to install python 3.12:
+~~~
+brew install python@3.12
+~~~
+
+Download the UI folder and run the following command:
+~~~
+python3.12 -m venv ./venv/
+source ./venv/bin/activate
+pip install -r ./requirements.txt
+deactivate
+~~~
+The resultant venv folder will take up about 4.2 GiB of space. Be aware that, if the path to the folder you downloaded the UI folder into has any :s in it, this will fail. To fix this error, relocate the UI folder
 
 ## Usage
 
