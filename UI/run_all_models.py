@@ -68,11 +68,9 @@ def main():
     input_path, output_path, log_path = parse_cli_args()
 
     model_paths = [
-        r"C:\Users\drake\OneDrive\Desktop\Senior_software_II\saved models\improved_master_model_dataset_Spectrogram_Balanced_v3.keras",
-        r"C:\Users\drake\OneDrive\Desktop\Senior_software_II\saved models\improved_master_model.keras",
-        r"C:\Users\drake\OneDrive\Desktop\Senior_software_II\saved models\my_model.keras_v1_gtzan.keras",
-        r"C:\Users\drake\OneDrive\Desktop\Senior_software_II\saved models\sec_to_last.keras",
-        r"C:\Users\drake\OneDrive\Desktop\Senior_software_II\saved models\spectogram_v1_gtzan_model.h5"
+        r"./models/improved_master_model_dataset_Spectrogram_Balanced_v3.keras",
+        r"./models/final_model.keras",
+        r"./models/sec_to_last.keras",
     ]
 
     print("Loading models........")
