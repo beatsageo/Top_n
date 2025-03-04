@@ -9,7 +9,7 @@ JSON_PREFIX = os.path.basename(DATASET_PATH) + "_mfccs"
 LOG_PATH = JSON_PREFIX + "_log.json"
 GENRE_MAPPING_PATH = "genre_mapping.json"  # Path to global genre mapping
 SAMPLE_RATE = 22050
-VECTOR_DURATION = 3  # measured in seconds
+VECTOR_DURATION = 30  # measured in seconds
 SAMPLES_PER_VECTOR = SAMPLE_RATE * VECTOR_DURATION
 
 
@@ -104,6 +104,8 @@ def save_mfcc(dataset_path, OUTPUT_FOLDER, json_prefix, log_path, genre_mapping_
                     # Calculate the total number of vectors
                     track_duration = len(signal) / sample_rate  # Duration in seconds
                     num_vectors = int((track_duration // VECTOR_DURATION))  # Adjust dynamically
+                    if track_duration % VECTOR_DURATION >= VECTOR_DURATION / 2:
+                        num_vectors += 1
 
                     print(f"Processing {file_path}: {track_duration:.2f} into ({num_vectors} vectors)")
 
@@ -117,14 +119,17 @@ def save_mfcc(dataset_path, OUTPUT_FOLDER, json_prefix, log_path, genre_mapping_
 
                         # Ensure we do not go beyond the actual track length
                         if finish > len(signal):
+                            start = len(signal) - samples_per_vector
                             finish = len(signal)
+
+                        print(f"    Vector {d + 1} from {int(start/sample_rate)} sec. to {int(finish/sample_rate)} sec.")
 
                         # Extract MFCCs
                         mfcc = librosa.feature.mfcc(y=signal[start:finish], sr=sample_rate, n_mfcc=num_mfcc, n_fft=n_fft, hop_length=hop_length)
                         mfcc = mfcc.T
 
                         # Store only vectors with the expected number of MFCC coefficients
-                        if len(mfcc) == num_mfcc_coefficient_per_vector:  # 13 MFCC coefficients per segment
+                        if len(mfcc) <= num_mfcc_coefficient_per_vector:  # 13 MFCC coefficients per segment
                             data["mfcc"].append(mfcc.tolist())
                             data["labels"].append(genre_index)
 
