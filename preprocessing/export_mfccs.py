@@ -2,11 +2,14 @@ import json
 import os
 import math
 import librosa
+import sys
 
-DATASET_PATH = "gtzan_dataset_split"
-OUTPUT_FOLDER = os.path.basename(DATASET_PATH) + "_mfccs"
-JSON_PREFIX = os.path.basename(DATASET_PATH) + "_mfccs"
-LOG_PATH = JSON_PREFIX + "_log.json"
+# typical call python export_mfccs.py ../AudioTest ../OutTest/ test
+DATASET_PATH = sys.argv[1]
+OUTPUT_FOLDER = sys.argv[2]
+JSON_PREFIX = sys.argv[2] + sys.argv[3] + "-data"
+LOG_PATH = sys.argv[2]  + sys.argv[3] + "-log.json"
+
 GENRE_MAPPING_PATH = "genre_mapping.json"  # Path to global genre mapping
 SAMPLE_RATE = 22050
 VECTOR_DURATION = 30  # measured in seconds
