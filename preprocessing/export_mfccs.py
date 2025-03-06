@@ -3,12 +3,15 @@ import os
 import math
 import librosa
 import sys
+import numpy as np
+
+# python export_mfccs.py gtzan_dataset_split gtzan_dataset_split_mfccs test
 
 # typical call python export_mfccs.py ../AudioTest ../OutTest/ test
 DATASET_PATH = sys.argv[1]
 OUTPUT_FOLDER = sys.argv[2]
-JSON_PREFIX = sys.argv[2] + sys.argv[3] + "-data"
-LOG_PATH = sys.argv[2]  + sys.argv[3] + "-log.json"
+JSON_PREFIX = sys.argv[2] + "-" + sys.argv[3] + "-data"
+LOG_PATH = sys.argv[2]  + "-" + sys.argv[3] + "-log.json"
 
 GENRE_MAPPING_PATH = "genre_mapping.json"  # Path to global genre mapping
 SAMPLE_RATE = 22050
@@ -122,17 +125,18 @@ def save_mfcc(dataset_path, OUTPUT_FOLDER, json_prefix, log_path, genre_mapping_
 
                         # Ensure we do not go beyond the actual track length
                         if finish > len(signal):
-                            start = len(signal) - samples_per_vector
-                            finish = len(signal)
-
-                        print(f"    Vector {d + 1} from {int(start/sample_rate)} sec. to {int(finish/sample_rate)} sec.")
-
-                        # Extract MFCCs
-                        mfcc = librosa.feature.mfcc(y=signal[start:finish], sr=sample_rate, n_mfcc=num_mfcc, n_fft=n_fft, hop_length=hop_length)
+                            remaining = finish - len(signal)
+                            padded_signal = np.pad(signal[start:finish], (0, remaining), mode='wrap')
+                            mfcc = librosa.feature.mfcc(y=padded_signal, sr=sample_rate, n_mfcc=num_mfcc, n_fft=n_fft, hop_length=hop_length)
+                            print(f"    {d+1}: Padded Vector between {int(start/sample_rate)} sec. and {int(len(signal)/sample_rate)}")
+                        else:
+                            mfcc = librosa.feature.mfcc(y=signal[start:finish], sr=sample_rate, n_mfcc=num_mfcc, n_fft=n_fft, hop_length=hop_length)
+                            print(f"    {d+1}: Vector from {int(start/sample_rate)} sec. to {int(finish/sample_rate)} sec.")
+                        
                         mfcc = mfcc.T
 
                         # Store only vectors with the expected number of MFCC coefficients
-                        if len(mfcc) <= num_mfcc_coefficient_per_vector:  # 13 MFCC coefficients per segment
+                        if len(mfcc) == num_mfcc_coefficient_per_vector:  # 13 MFCC coefficients per segment
                             data["mfcc"].append(mfcc.tolist())
                             data["labels"].append(genre_index)
 
