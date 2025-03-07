@@ -68,9 +68,10 @@ def main():
     input_path, output_path, log_path = parse_cli_args()
 
     model_paths = [
-        r"./models/improved_master_model_dataset_Spectrogram_Balanced_v3.keras",
-        r"./models/final_model.keras",
-        r"./models/sec_to_last.keras",
+        # r"./models/improved_master_model_dataset_Spectrogram_Balanced_v3.keras",
+        # r"./models/final_model.keras",
+        # r"./models/sec_to_last.keras",
+        r"./models/improved_master_model_finetuned.keras"
     ]
 
     print("Loading models........")
