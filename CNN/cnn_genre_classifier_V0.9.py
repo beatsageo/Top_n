@@ -31,22 +31,14 @@ def load_or_create_genre_mapping():
         return []
 
 
-def update_genre_mapping(new_genres):
-    """Ensures new genres are added to the global mapping."""
-    genres = load_or_create_genre_mapping()
-    updated = False
-    for genre in new_genres:
-        if genre not in genres:
-            genres.append(genre)
-            updated = True
-    if updated:
-        with open(GENRE_MAPPING_PATH, "w") as fp:
-            json.dump({"genres": genres}, fp, indent=4)
-    return genres
-
-
-# Build Improved CNN Model
 def build_model(input_shape, num_classes):
+    """Builds a CNN model using the Sequential API.
+
+    :param input_shape (tuple): Shape of the input data (height, width, channels)
+    :param num_classes (int): Number of classes in the dataset
+
+    :return: model
+    """
     model = keras.Sequential()
 
     # Conv Block 1 + SE
@@ -80,8 +72,14 @@ def build_model(input_shape, num_classes):
     return model
 
 
-# Load and Combine Data from All Genres
 def load_combined_data(DATA_FOLDER_PATH):
+    """Loads the combined dataset from the given folder path.
+
+    :param DATA_FOLDER_PATH: Path to the folder containing the dataset JSON files
+
+    :return: X, y
+    """
+
     X, y = [], []
     dataset_files = [f for f in os.listdir(DATA_FOLDER_PATH) if f.endswith(".json")]
 
@@ -108,14 +106,17 @@ def compile_model(model):
 
 
 def train_model(model, X_train, y_train, validation_split, batch_size, epochs, class_weight_dict):
-    """Trains model
+    """Trains model on the given data and returns the training history.
 
     :param model: Model to train
-    :param test_size: Percentage of data to use for testing
-    :param validation_size: Percentage of data to use for validation
+    :param X_train: Training data
+    :param y_train: Training labels
+    :param validation_split: Percentage of data to use for validation
     :param batch_size: Batch size for training
     :param epochs: Number of epochs to train
-    :param callbacks: List of callbacks for training
+    :param class_weight_dict: Dictionary of class weights for imbalanced datasets
+
+    :return: History object from training
     """
 
     callbacks = [
@@ -138,7 +139,10 @@ def train_model(model, X_train, y_train, validation_split, batch_size, epochs, c
 
 
 def plot_history(history):
-    """Plots accuracy/loss for training/validation set."""
+    """Plots accuracy/loss for training/validation set.
+
+    :param history: Training history of model
+    """
     fig, axs = plt.subplots(2)
     axs[0].plot(history.history["accuracy"], label="train accuracy")
     axs[0].plot(history.history["val_accuracy"], label="test accuracy")
@@ -170,6 +174,7 @@ def load_trained_model(filename=MODEL_PATH):
 
 def predict(top_n=5):
     """Predict a single sample using the trained model and show top N predicted classes.
+
     :param top_n (int): Number of top predictions to show
     """
 
@@ -258,17 +263,14 @@ if __name__ == "__main__":
     To predict model: 'python cnn_genre_classifier_V0.9.py --mode predict'
     """
 
-    # parser = argparse.ArgumentParser(description="Train/evaluate the model or run a prediction.")
-    # parser.add_argument("--mode", type=str, choices=["train", "predict"], required=True,
-    #                     help="Choose to either 'train' the model or 'predict' a sample.")
+    parser = argparse.ArgumentParser(description="Train/evaluate the model or run a prediction.")
+    parser.add_argument("--mode", type=str, choices=["train", "predict"], required=True,
+                        help="Choose to either 'train' the model or 'predict' a sample.")
 
-    # args = parser.parse_args()
+    args = parser.parse_args()
 
-    # if args.mode == "train":
-    #     train_and_evaluate()
+    if args.mode == "train":
+        train_and_evaluate()
 
-    # elif args.mode == "predict":
-    #     run_prediction()
-
-    # train_and_evaluate()
-    predict()
+    elif args.mode == "predict":
+        predict()
