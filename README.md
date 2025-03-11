@@ -45,11 +45,12 @@ python3.12 -m venv ./venv
 source ./venv/bin/activate
 pip install -r ./requirements.txt
 deactivate
+chmod +x ./findGenre
 ~~~
 The resultant venv folder will take up about 4.2 GiB of space. 
 > Be aware that, if the path to the folder you downloaded the UI folder into has any :s in it, this will fail. To fix this error, relocate the UI folder
 
-Download the other models - improved_master_model_dataset_Spectrogram_Balanced_v3.keras and sec_to_last.keras from TBD and place them in UI/models alongside final_model.keras
+Download the other models - improved_master_model_dataset_Spectrogram_Balanced_v3.keras and sec_to_last.keras from Location TBD and place them in UI/models alongside final_model.keras
 
 ### Windows (Untested/Experimental)
 If using a UNIX-like environment for Windows, like [Cygwin](https://cygwin.com/), then the Linux commands should be used instead, and findGenre should work, but one will have to install python 3.12 for one's environment. To install python 3.12 on Windows, visit [the Python website](https://www.python.org/downloads/windows/) to download and install the latest 3.12.x version of Python. This guide was written when that was 3.12.9, should extra errors crop up. Alternatively, install python 3.12 directly from the [Microsoft Store](https://apps.microsoft.com/detail/9ncvdn91xzqp?hl=en-us&gl=US).
