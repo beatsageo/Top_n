@@ -10,8 +10,8 @@ import numpy as np
 # typical call python export_mfccs.py ../AudioTest ../OutTest/ test
 DATASET_PATH = sys.argv[1]
 OUTPUT_FOLDER = sys.argv[2]
-JSON_PREFIX = "-" + sys.argv[3] + "-data"
-LOG_PATH = "-" + sys.argv[3] + "-log.json"
+JSON_PREFIX = sys.argv[3] + "-data"
+LOG_PATH = sys.argv[3] + "-log.json"
 
 GENRE_MAPPING_PATH = "genre_mapping.json"  # Path to global genre mapping
 SAMPLE_RATE = 22050
