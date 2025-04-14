@@ -69,7 +69,7 @@ python3.12 -m venv .\venv
 pip install -r .\requirements.txt
 deactivate
 ~~~
-The resultant venv folder will take up about 4.2 GiB? of space. 
+The resultant venv folder will take up about 4.2 GiB of space. 
 
 Download the other models - improved_master_model_dataset_Spectrogram_Balanced_v3.keras and sec_to_last.keras from TBD and place them in UI\models alongside final_model.keras. Open run_all_models.py and change the strings of model_paths to be the paths to your models, it is currently set up for use on Linux/MacOS, not Windows.
 
@@ -86,19 +86,23 @@ findGenre – find the genre of a music audio clip
 
 SYNOPSIS 
 
-findGenre [OPTION] ... [INPUT]... 
+findGenre [OPTION] ... 
 
 DESCRIPTION 
 
-Finds the genre of a music audio clip or folder, INPUT, outputting the results of the analysis to standard output (unless the user pipes that into a file) in the form of comma-separated genre names and confidence values, like this: 
+Finds the genre of a music audio clip or folder, provided by the inputPath option, outputting the results of the analysis to standard output (unless the user pipes that into a file) in the form of comma-separated genre names and confidence values, like this: 
 
 audioClipOneNoExt, classical, 0.8, jazz, 0.6, rock, 0.2, pony, 0.02 
 
 audioClipTwoNoExt, rock 0.99, jazz, 0.12, pony. 0.1, classical, 0.007  
 
-If no INPUT is provided, the command does nothing, unless another option overrides it. If non-music files are in INPUT, they are ignored. 
+If no inputPath is provided, the command does nothing, unless another option overrides it. If non-music files are in the folder pointed to by inputPath, they are ignored. 
 
--b, --best-genres=GENRES 
+-i PATH, --inputPath PATH
+
+Take in audio clips from the folder pointed to by PATH. If PATH points to a single file, then intake only that single file.
+
+-b, --best-genres GENRES 
 
 Restricts the output to no more than GENRES possible genres. This is a maximum and is therefore meaningless if the limit is set sufficiently high. If not included, the model will provide confidence values for all genres. 
 
