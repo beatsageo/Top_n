@@ -1,10 +1,71 @@
-source ./venv/bin/activate # activate the venv
+# read in the arguments, based on https://unix.stackexchange.com/questions/628942/bash-script-with-optional-input-arguments-using-getopt
+# provisional
+vars=$(getopt -o i:o:b:vh --long input-path:,output-path:,best-genres:,version,help -- "$@")
+eval set -- "$vars"
 
-mkdir ./temp
-python -W ignore ./spectrogramGen.py -Wignore --inputPath $1 --outputPath ./temp # output all audio
-python run_all_models.py --inputPath ./temp --outputPath ./tempOut.json --logPath ./predictLog.json
-rm -r ./temp
+# set our defaults here - if either are still null, we print help
+inputPathVar='null'
+outputPathVar='null'
+numGenres=0 #if 0, print all, otherwise print only numGenres top picks
+isHelpVar=0 #if 1, print help
+printVersionInfoVar=0 #if 1, print version, unless printing help
 
-cat ./tempOut.json
+for opt; do
+    case "$opt" in
+      -i|--input-path) #for -i or --input-path
+        inputPathVar=$2 #set input path to what immediately follows this
+        shift 2 #move us two args forward - this plus the arg immediately following it
+        ;;
+      -o|--output-path)
+        outputPathVar=$2 #set input path to what immediately follows this
+        shift 2 #move us two args forward - this plus the arg immediately following it
+        ;;
+      -b|--best-genres)
+        numGenres=$2
+        shift 2 #move past this arg
+        ;;
+      -v|--version)
+        printVersionInfoVar=1
+        shift 1 #move past this arg
+        ;;
+      -h|--help)
+        isHelpVar=1
+        shift 1 #move past this arg
+        ;;
+    esac
+done
 
-deactivate # turn off the venv, return the user to their normal shell environment
+# part derived from modified stack exchange code done
+
+# now, we act on our results.
+
+# if we're not printing version, and we don't have an input path, then we print help. The user clearly doesn't know what they're doing
+if [ "$inputPathVar" == "null" ]; then
+    if [ "$printVersionInfoVar" = 0 ]; then
+        isHelpVar=1
+    fi
+fi
+
+
+if [ "$isHelpVar" = 1 ]; then
+    # this means we print help, and do nothing else
+    cat ./man.txt
+else
+    # okay, we're not doing help, are we doing version
+    if [ "$printVersionInfoVar" = 1 ]; then
+        cat ./version.txt
+    else
+        source ./venv/bin/activate # activate the venv
+
+        mkdir ./temp # make a temporary directory to store spetrograms
+        python -W ignore ./spectrogramGen.py -Wignore --inputPath $inputPathVar --outputPath ./temp # process all audio
+        python run_all_models.py --inputPath ./temp --outputPath $outputPathVar --logPath ./predictLog.json # output JSONs, outputPathVar is temporary
+
+        rm -r ./temp # delete the temp directory used to store spectrograms
+
+        # TBD Process Output, this is where we use numGenres
+
+        #deactivate # turn off the venv, return the user to their normal shell environment
+    fi
+fi
+

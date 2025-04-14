@@ -1,0 +1,7 @@
+findGenre 0.9
+License: MIT
+
+Accuracy: TBD
+
+Written by the Top-N Music Genre Classification Neural Network Team, see:
+<https://github.com/beatsageo/Top_n/>.
