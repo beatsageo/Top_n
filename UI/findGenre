@@ -65,7 +65,7 @@ else
 
         # TBD Process Output, this is where we use numGenres
 
-        #deactivate # turn off the venv, return the user to their normal shell environment
+        deactivate # turn off the venv, return the user to their normal shell environment
     fi
 fi
 
