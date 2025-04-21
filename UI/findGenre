@@ -5,8 +5,8 @@ eval set -- "$vars"
 
 # set our defaults here - if either are still null, we print help
 inputPathVar='null'
-outputPathVar='null'
-numGenres=0 #if 0, print all, otherwise print only numGenres top picks
+outputPathVar=./temp.json
+numGenres=12 #print only numGenres top picks
 isHelpVar=0 #if 1, print help
 printVersionInfoVar=0 #if 1, print version, unless printing help
 
@@ -22,7 +22,7 @@ for opt; do
         ;;
       -b|--best-genres)
         numGenres=$2
-        shift 2 #move past this arg
+        shift 2 #move past this arg, now, we're done
         ;;
       -v|--version)
         printVersionInfoVar=1
@@ -59,11 +59,12 @@ else
 
         mkdir ./temp # make a temporary directory to store spetrograms
         python -W ignore ./spectrogramGen.py -Wignore --inputPath $inputPathVar --outputPath ./temp # process all audio
-        python run_all_models.py --inputPath ./temp --outputPath $outputPathVar --logPath ./predictLog.json # output JSONs, outputPathVar is temporary
+        python -W ignore run_all_models.py --inputPath ./temp --outputPath ./temp.json --logPath ./predictLog.json # output JSONs, outputPathVar is temporary
 
         rm -r ./temp # delete the temp directory used to store spectrograms
 
-        # TBD Process Output, this is where we use numGenres
+        # Process Output, this is where we use numGenres
+        python convertUtilites.py --inputFilePath ./temp.json --topN $numGenres
 
         deactivate # turn off the venv, return the user to their normal shell environment
     fi
