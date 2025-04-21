@@ -59,12 +59,12 @@ else
 
         mkdir ./temp # make a temporary directory to store spetrograms
         python -W ignore ./spectrogramGen.py -Wignore --inputPath $inputPathVar --outputPath ./temp # process all audio
-        python -W ignore run_all_models.py --inputPath ./temp --outputPath ./temp.json --logPath ./predictLog.json # output JSONs, outputPathVar is temporary
+        python -W ignore run_all_models.py --inputPath ./temp --outputPath $outputPathVar --logPath ./predictLog.json # output JSONs, outputPathVar is temporary
 
         rm -r ./temp # delete the temp directory used to store spectrograms
 
         # Process Output, this is where we use numGenres
-        python convertUtilites.py --inputFilePath ./temp.json --topN $numGenres
+        python convertUtilites.py --inputFilePath $outputPathVar --topN $numGenres
 
         deactivate # turn off the venv, return the user to their normal shell environment
     fi
