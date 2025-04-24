@@ -2,6 +2,7 @@ import json
 import csv
 import sys
 import argparse
+import os
 
 GENRES = [
     "blues", "classical", "country", "disco", "electronic",
@@ -50,6 +51,40 @@ def convert_json_to_csv(filepath = "", N = -1, mapping = GENRES, write_to_file =
 
     #closing file
     f.close()
+
+def read_files_in_directory(directory_path):
+    """Reads and prints the number of correct and incorrect of a genre out.
+
+    Args:
+        directory_path: The path to the directory containing the files.
+    """
+    try:
+        files = [f for f in os.listdir(directory_path) if os.path.isfile(os.path.join(directory_path, f))]
+        if not files:
+            print(f"No files found in directory: {directory_path}")
+            return
+        for file_name in files:
+            file_path = os.path.join(directory_path, file_name)
+            genre = file_name.split("-")[0] #get genre on file_name
+            #open json file
+            f = open(file_path)
+            data = json.load(f)
+            #correct and incorrect variable will set 0 at the begin of each genre
+            correct = 0
+            incorrect = 0
+            for record in data:
+                if genre == GENRES[record['ensemble_label']]:
+                    correct += 1
+                else: incorrect += 1
+                
+            print(f"{genre} \n correct: {correct} \n incorrect: {incorrect}")
+            correct = 0
+            incorrect = 0
+
+    except FileNotFoundError:
+         print(f"Error: Directory not found: {directory_path}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 def arg_parser():
     parser = argparse.ArgumentParser()
