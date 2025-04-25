@@ -53,12 +53,17 @@ def convert_json_to_csv(filepath = "", N = -1, mapping = GENRES, write_to_file =
     f.close()
 
 def read_files_in_directory(directory_path):
-    """Reads and prints the number of correct and incorrect of a genre out.
+    """Reads and prints the content of each file in the given directory.
 
     Args:
         directory_path: The path to the directory containing the files.
     """
     try:
+        #initiate the wrong_dict dictionary
+        wrong_dict = {genre: 0 for genre in GENRES}
+        #initiate the correct_dict dictionary
+        correct_dict = {genre: 0 for genre in GENRES}
+
         files = [f for f in os.listdir(directory_path) if os.path.isfile(os.path.join(directory_path, f))]
         if not files:
             print(f"No files found in directory: {directory_path}")
@@ -75,12 +80,17 @@ def read_files_in_directory(directory_path):
             for record in data:
                 if genre == GENRES[record['ensemble_label']]:
                     correct += 1
-                else: incorrect += 1
-                
-            print(f"{genre} \n correct: {correct} \n incorrect: {incorrect}")
+                else:
+                    wrong_dict[GENRES[record['ensemble_label']]] += 1
+
+            correct_dict[genre] = correct #update correct genre
             correct = 0
             incorrect = 0
-
+            
+        print(correct_dict)
+        print('----------------')
+        print(wrong_dict)
+        
     except FileNotFoundError:
          print(f"Error: Directory not found: {directory_path}")
     except Exception as e:
