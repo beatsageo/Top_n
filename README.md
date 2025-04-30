@@ -90,15 +90,15 @@ findGenre [OPTION] ...
 
 DESCRIPTION 
 
-Finds the genre of a music audio clip or folder, provided by the inputPath option, outputting the results of the analysis to standard output (unless the user pipes that into a file) in the form of comma-separated genre names and confidence values, like this: 
+Finds the genre of a music audio clip or folder, provided by the input-path option, outputting the results of the analysis to standard output (unless the user pipes that into a file) in the form of comma-separated genre names and confidence values, like this: 
 
 audioClipOneNoExt, classical, 0.8, jazz, 0.6, rock, 0.2, pony, 0.02 
 
 audioClipTwoNoExt, rock 0.99, jazz, 0.12, pony. 0.1, classical, 0.007  
 
-If no inputPath is provided, the command does nothing, unless another option overrides it. If non-music files are in the folder pointed to by inputPath, they are ignored. 
+If no input-path is provided, the command does nothing, unless another option overrides it. If non-music files are in the folder pointed to by input-path, they are ignored. 
 
--i PATH, --inputPath PATH
+-i PATH, --input-path PATH
 
 Take in audio clips from the folder pointed to by PATH. If PATH points to a single file, then intake only that single file.
 
