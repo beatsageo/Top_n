@@ -58,8 +58,8 @@ else
         source ./venv/bin/activate # activate the venv
 
         mkdir ./temp # make a temporary directory to store spetrograms
-        python -W ignore ./spectrogramGen.py -Wignore --inputPath $inputPathVar --outputPath ./temp # process all audio
-        python -W ignore run_all_models.py --inputPath ./temp --outputPath $outputPathVar --logPath ./predictLog.json # output JSONs, outputPathVar is temporary
+        python -W ignore ./spectrogramGen.py -Wignore --inputPath $inputPathVar --outputPath ./temp 1>&2 # process all audio, redirect all stdout to stderr to not interfere wt piping, this trick based on information from https://vsys.host/how-to/how-to-redirect-stdout-and-stderr-to-file-in-bash#1-stdout-the-standard-output-stream
+        python -W ignore run_all_models.py --inputPath ./temp --outputPath $outputPathVar --logPath ./predictLog.json  1>&2 # output JSONs, outputPathVar is temporary, redirect all stdout to stderr to not interfere wt piping
 
         rm -r ./temp # delete the temp directory used to store spectrograms
 
