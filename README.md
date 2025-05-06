@@ -18,7 +18,7 @@
 - A. Walsh
 
 ## About
-This project is the Senior Software Engineering Design Project for the team of contributors. The main function of this software is a genre prediction algorithim.  Users will submit audio files for genra classification and the program will return the most probable genra classification probability.
+This project is the Senior Software Engineering Design Project for the team of contributors. The main function of this software is a genre prediction algorithim.  Users will submit audio files for genre classification and the program will return the probabilities of the most probable genre classifications.
 
 ![UML](/UML.jpg)
 
