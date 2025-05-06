@@ -1,7 +1,6 @@
 
 <p align="center">
 <img src="/osulogo.jpg" hspace="100" alt="image" width="300" height="auto">
-<img src="/osulogo.jpg" hspace="100" alt="image" width="300" height="auto">
 </p>
 
 # Top_n Genre Classification Neural Neural Network 
@@ -118,17 +117,6 @@ The GENRES argument is an unsigned integer.
 
 FILE must be an audio file belonging to a list, to be specified later (and likely expanded over time as development resources are available). 
 
-Exit Status 
-
-0	if OK, 
-
-1	if there are errors in the CNN, output may be unreliable, 
-
-2	if there are errors in the CNN, no data is output, 
-
-3	if some audio clip not found or read, results likely incomplete, 
-
-4	if there are command errors (ie invalid command line arguments) 
 
 ### EXAMPLES 
 
