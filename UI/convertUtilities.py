@@ -52,6 +52,46 @@ def convert_json_to_csv(filepath = "", N = -1, mapping = GENRES, write_to_file =
     #closing file
     f.close()
 
+def calculate_cli_accuracy(directory_path):
+    """Reads and prints the content of each file in the given directory.
+
+    Args:
+        directory_path: The path to the directory containing the files.
+    """
+    try:
+
+        files = [f for f in os.listdir(directory_path) if os.path.isfile(os.path.join(directory_path, f))]
+        if not files:
+            print(f"No files found in directory: {directory_path}")
+            return
+        for file_name in files:
+            file_path = os.path.join(directory_path, file_name)
+            genre = file_name.split("-")[0] #get genre on file_name
+            #open json file
+            f = open(file_path)
+            data = json.load(f)
+            #correct_pro and incorrect_pro probability will set to 0 at the begin of each genre
+            correct_pro = 0
+            incorrect_pro = 0
+            song_count = 0
+            for record in data:
+                song_count += 1
+                if genre == GENRES[record['ensemble_label']]:
+                    correct_pro += record['combined_probabilities'][record['ensemble_label']]
+                else:
+                    incorrect_pro += record['combined_probabilities'][record['ensemble_label']]
+            #calculate the correct probability
+            pro = (correct_pro - incorrect_pro)/song_count
+            print(f"{genre}: {pro}")
+            #reset all these number for a new genre
+            correct_pro = 0
+            incorrect_pro = 0
+            song_count = 0
+    except FileNotFoundError:
+         print(f"Error: Directory not found: {directory_path}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
 def read_files_in_directory(directory_path):
     """Reads and prints the content of each file in the given directory.
 
