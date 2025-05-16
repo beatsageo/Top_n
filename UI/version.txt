@@ -1,7 +1,20 @@
-findGenre 0.9
+findGenre 1.0
 License: MIT
 
-Accuracy: TBD
+Accuracy by Genre (v6_underrepresented.keras)
+    Disco: 0.05189509902681623
+    Hiphop: 0.594666131905147
+    Classical: 0.4653927981853485
+    R&B: -0.5332273351294654
+    Electronic: -0.35414327681064606
+    Rock: -0.3697942708219801
+    Blues: -0.2752043402620724
+    Pop: -0.09846387271370206
+    Metal: -0.17569350557667868
+    Reggae: 0.16468473843165807
+    Country: 0.40800556753362927
+    Jazz: 0.19929511206490652
+For an explanation of model accuracy, please review the man page for findGenre or call --help
 
 Written by the Top-N Music Genre Classification Neural Network Team, see:
 <https://github.com/beatsageo/Top_n/>.
