@@ -3,7 +3,7 @@
 ../linuxbrew/.linuxbrew/bin/brew update --force --quiet
 ../linuxbrew/.linuxbrew/bin/brew install python@3.12
 
-# add brew and whatnot to path, drawn from brew's own instructions, provided when you run the installer
+# add brew and whatnot to path, drawn from brew's own instructions, provided when you run the installer (https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)
 echo >> ~/.bashrc
 echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bashrc
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
