@@ -33,7 +33,7 @@ View the MIT [LICENSE](/LICENSE)
 python 3.12
 
 ### Linux/MacOS
-To install python 3.12, consider installing and using [Homebrew](https://brew.sh/). Once Homebrew is installed, run the following command to install python 3.12:
+To install python 3.12, consider installing and using [Homebrew](https://brew.sh/); make sure to fllow the installer's prompts to add it to your $PATH. Once Homebrew is installed, run the following command to install python 3.12:
 ~~~
 brew install python@3.12
 ~~~
