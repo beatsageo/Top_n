@@ -30,21 +30,22 @@ def mapping_prob(mapping = GENRES, pro_result = [], N = -1):
 
 #if N = -1 default, export all 12 genres. If write_to_file = false -> console, else -> write to a csv file with the same name
 def convert_json_to_csv(filepath = "", N = -1, mapping = GENRES, write_to_file = False):
+    base_filename = os.path.splitext(os.path.basename(filepath))[0]
     #opening JSON file
-    f = open(filepath)
-    data = json.load(f)
+    with open(filepath) as f:
+        data = json.load(f)
 
     if not write_to_file:
         for record in data:
-            print(record['filename'],',', mapping_prob(mapping, record['combined_probabilities'], N = N))
+            print(base_filename,',', mapping_prob(mapping, record['combined_probabilities'], N = N))
     else:
         csv_filename = filepath.replace(".json", ".csv")
         with open(csv_filename, 'w') as out_file:
             for record in data:
-                filename = record['filename']
+                #filename = record['filename']
                 probs = record['combined_probabilities']
                 mapped = mapping_prob(mapping, probs, N=N)  # returns top N as a string
-                line = f"{filename},{mapped}\n"
+                line = f"{base_filename},{mapped}\n"
                 out_file.write(line)
 
         print(f"CSV file saved to: {csv_filename}")
