@@ -1,6 +1,5 @@
 # read in the arguments, based on https://unix.stackexchange.com/questions/628942/bash-script-with-optional-input-arguments-using-getopt
-# provisional
-vars=$(getopt -o i:o:b:vh --long input-path:,output-path:,best-genres:,version,help -- "$@")
+vars=$(getopt -o i:o:b:vhmd --long input-path:,output-path:,best-genres:,version,help,mfcc,debug -- "$@")
 eval set -- "$vars"
 
 # set our defaults here - if either are still null, we print help
@@ -9,6 +8,8 @@ outputPathVar=./temp.json
 numGenres=12 #print only numGenres top picks
 isHelpVar=0 #if 1, print help
 printVersionInfoVar=0 #if 1, print version, unless printing help
+isMFCC=0 #if != 0, then use the MFCCs, otherwise use spectrogram
+isDebug=0 #if != 1 if you want debug, which leaves temp folders/files
 
 for opt; do
     case "$opt" in
@@ -32,10 +33,18 @@ for opt; do
         isHelpVar=1
         shift 1 #move past this arg
         ;;
+      -m|--mfcc)
+        isMFCC=1
+        shift 1 #move past this arg
+        ;;
+      -d|--debug)
+        isDebug=1
+        shift 1 #move past this arg
+        ;;
     esac
 done
 
-# part derived from modified stack exchange code done
+# end of part derived from modified stack exchange code
 
 # now, we act on our results.
 
@@ -57,16 +66,27 @@ else
     else
         source ./venv/bin/activate # activate the venv
 
-        mkdir ./temp # make a temporary directory to store spetrograms
-        python -W ignore ./spectrogramGen.py -Wignore --inputPath $inputPathVar --outputPath ./temp 1>&2 # process all audio, redirect all stdout to stderr to not interfere wt piping, this trick based on information from https://vsys.host/how-to/how-to-redirect-stdout-and-stderr-to-file-in-bash#1-stdout-the-standard-output-stream
-        python -W ignore run_all_models.py --inputPath ./temp --outputPath $outputPathVar --logPath ./predictLog.json  1>&2 # output JSONs, outputPathVar is temporary, redirect all stdout to stderr to not interfere wt piping
+        mkdir ./temp # make a temporary directory to store spetrograms/mfccs
+        if [ "$isMFCC" = 0 ]; then
+          python -W ignore spectrogramGen.py -Wignore --inputPath $inputPathVar --outputPath ./temp 1>&2 # process all audio, redirect all stdout to stderr to not interfere wt piping, this trick based on information from https://vsys.host/how-to/how-to-redirect-stdout-and-stderr-to-file-in-bash#1-stdout-the-standard-output-stream
+          python -W ignore run_all_models.py --inputPath ./temp --outputPath $outputPathVar --logPath ./predictLog.json 1>&2 # output JSONs, outputPathVar is temporary, redirect all stdout to stderr to not interfere wt piping
+        else
+          python -W ignore export_mfccs.py $inputPathVar ./temp/ data blues 1>&2 # make my MFCCS
+          rm ./temp/data-log.json # this log messes up the predict_genre system if we leave it, so rm it for now
+          python -W ignore predict_genre_V1.2.py ./models/mfccModel.h5 ./temp/ 1>$outputPathVar # run the actual model, dumping results to $outputPathVar
+        fi
 
-        rm -r ./temp # delete the temp directory used to store spectrograms
-
+        if [ "$isDebug" = 0 ]; then
+          rm -r ./temp # delete the temp directory used to store spectrograms/mfccs
+        fi
         # Process Output, this is where we use numGenres
         python convertUtilities.py --inputFilePath $outputPathVar --topN $numGenres
 
+      if [ "$isDebug" = 0 ]; then
+          rm ./temp.json # delete the temp JSON so runs don't interfere... if another outputPathVar wasn't specified
+        fi
         deactivate # turn off the venv, return the user to their normal shell environment
+
     fi
 fi
 
