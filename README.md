@@ -99,7 +99,7 @@ If no input-path is provided, the command does nothing, unless another option ov
 
 -i PATH, --input-path PATH
 
-Take in audio clips from the folder pointed to by PATH. If PATH points to a single file, then intake only that single file.
+Take in audio clips from the folder pointed to by PATH.
 
 -b, --best-genres GENRES 
 
@@ -120,7 +120,7 @@ FILE must be an audio file belonging to a list, to be specified later (and likel
 
 ### EXAMPLES 
 
-findGenre –b=2 ./ -i > foo.txt 
+findGenre –b=2 -i ./ > foo.txt 
 
 Attempts to read each file as the audio file type indicated by its extension (.mp4, .mp3, .wav...). The files that can be read are processed by the model, and the output strings are dumped into foo.txt, in the specified format, but with no more than two genre confidence values per file. 
 
