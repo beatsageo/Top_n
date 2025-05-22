@@ -49,7 +49,7 @@ chmod +x ./findGenre
 The resultant venv folder will take up about 4.2 GiB of space. 
 > Be aware that, if the path to the folder you downloaded the UI folder into has any :s in it, this will fail. To fix this error, relocate the UI folder
 
-Download the other models - improved_master_model_dataset_Spectrogram_Balanced_v3.keras and sec_to_last.keras from Location TBD and place them in UI/models alongside final_model.keras
+Then download a compatible model (recommended: [v6_underrepresented.keras, link temporary](https://oregonstateuniversity.sharepoint.com/:u:/s/Top-nMusic/EV2VkliU6h5OknWQqBxABmkBKT5mE7nxyshKezm-rCD8zA?e=xK2GvY)), rename whatever model you want the system to use to spectrogramModel.keras, and place it in UI/models alongside final_model.keras
 
 ### Windows (Untested/Experimental)
 If using a UNIX-like environment for Windows, like [Cygwin](https://cygwin.com/), then the Linux commands should be used instead, and findGenre should work, but one will have to install python 3.12 for one's environment. To install python 3.12 on Windows, visit [the Python website](https://www.python.org/downloads/windows/) to download and install the latest 3.12.x version of Python. This guide was written when that was 3.12.9, should extra errors crop up. Alternatively, install python 3.12 directly from the [Microsoft Store](https://apps.microsoft.com/detail/9ncvdn91xzqp?hl=en-us&gl=US).
@@ -70,7 +70,7 @@ deactivate
 ~~~
 The resultant venv folder will take up about 4.2 GiB of space. 
 
-Download the other models - improved_master_model_dataset_Spectrogram_Balanced_v3.keras and sec_to_last.keras from TBD and place them in UI\models alongside final_model.keras. Open run_all_models.py and change the strings of model_paths to be the paths to your models, it is currently set up for use on Linux/MacOS, not Windows.
+Then download a compatible model (recommended: [v6_underrepresented.keras, link temporary](https://oregonstateuniversity.sharepoint.com/:u:/s/Top-nMusic/EV2VkliU6h5OknWQqBxABmkBKT5mE7nxyshKezm-rCD8zA?e=xK2GvY)), rename whatever model you want the system to use to spectrogramModel.keras, and place it in UI\models alongside final_model.keras. Open run_all_models.py and change the strings of model_paths to be the paths to your models, it is currently set up for use on Linux/MacOS type paths, not Windows.
 
 
 Use findGenre_win, rather than findGenre on Windows. Alternatively, findGenre may work on Windows using [Git BASH](https://gitforwindows.org/)
@@ -120,11 +120,11 @@ FILE must be an audio file belonging to a list, to be specified later (and likel
 
 ### EXAMPLES 
 
-findGenre –b=2 ./ > foo.txt 
+findGenre –b=2 ./ -i > foo.txt 
 
 Attempts to read each file as the audio file type indicated by its extension (.mp4, .mp3, .wav...). The files that can be read are processed by the model, and the output strings are dumped into foo.txt, in the specified format, but with no more than two genre confidence values per file. 
 
-findGenre ./R\ U\ L\ E\ T\ H\ E\ W\ O\ R\ L\ D\ \(Gulf\ War\ edit\).mp4 
+findGenre -i ./R\ U\ L\ E\ T\ H\ E\ W\ O\ R\ L\ D\ \(Gulf\ War\ edit\).mp4 
 
 Reads the file R U L E T H E W O R L D (Gulf War edit).mp4 from the current directory and outputs to the terminal the model’s confidence values for all genres. 
 
