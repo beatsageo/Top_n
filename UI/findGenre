@@ -64,7 +64,7 @@ else
         rm -r ./temp # delete the temp directory used to store spectrograms
 
         # Process Output, this is where we use numGenres
-        python convertUtilites.py --inputFilePath $outputPathVar --topN $numGenres
+        python convertUtilities.py --inputFilePath $outputPathVar --topN $numGenres
 
         deactivate # turn off the venv, return the user to their normal shell environment
     fi
