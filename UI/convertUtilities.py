@@ -45,7 +45,7 @@ def convert_json_to_csv(filepath = "", N = -1, mapping = GENRES, write_to_file =
                 #filename = record['filename']
                 probs = record['combined_probabilities']
                 mapped = mapping_prob(mapping, probs, N=N)  # returns top N as a string
-                line = f"{base_filename},{mapped}\n"
+                line = f"{record['filename']},{mapped}\n"
                 out_file.write(line)
 
         print(f"CSV file saved to: {csv_filename}")
