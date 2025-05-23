@@ -24,6 +24,7 @@ while currArg < (argNum-1):
     currArg += 1  # we've processed this argument, next!
 
 # Create and save spectrogram images
+songs = list(song for song in songs if song.endswith((".au",".mp3",".mp4","m4a",".webm")))
 numSongs = len(songs)
 print(f"Processing {numSongs} audio files...")
 for i in range(0, numSongs):
