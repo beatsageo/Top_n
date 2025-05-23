@@ -20,4 +20,4 @@ chmod +x ./findGenre
 deactivate
 
 # tell the user we're ready
-echo "Download models and store them in /Top_n/UI/models, then run the findGenre at will"
+echo "Download models and store them in /Top_n/UI/models, rename the one you want to use to spectrogramModel.keras, and run findGenre at will"
